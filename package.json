@@ -5,10 +5,14 @@
     "name": "marudor",
     "email": "marudor@marudor.de"
   },
+  "license": "MIT",
   "repository": "marudor/inline-css-loader",
   "scripts": {
     "build": "webpack -p"
   },
+  "files": [
+    "index.js"
+  ],
   "keywords": [
     "radium",
     "inline-css",
@@ -34,7 +38,6 @@
     "escodegen": "^1.6.1",
     "lodash": "^3.10.1"
   },
-  "scripts": {},
   "maintainers": [
     {
       "name": "marudor",
