@@ -14,8 +14,11 @@ module.exports = {
   output: {
     path: './',
     filename: 'index.js',
-    publicPath: ''
+    publicPath: '',
+    library: 'inlineCssLoader',
+    libraryTarget: 'commonjs2'
   },
+  target: 'node',
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel!eslint', include: path.join(__dirname, 'src')},

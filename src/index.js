@@ -133,7 +133,7 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   });
 }
 
-export default (content, map) => {
+export default function inlineCssLoader(content) {
   if (this.cacheable) {
     this.cacheable();
   }
@@ -145,4 +145,4 @@ export default (content, map) => {
   const exportNode = getExportsNode(tree.body);
   flatten(exportNode, exportNode, '', true);
   return escodegen.generate(tree);
-};
+}
