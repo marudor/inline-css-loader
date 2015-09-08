@@ -1,5 +1,15 @@
 var path = require('path');
+var fs = require('fs');
 var webpack = require('webpack');
+
+var nodeModules = {};
+fs.readdirSync('node_modules')
+.filter(function(x) {
+  return ['.bin'].indexOf(x) === -1;
+})
+.forEach(function(mod) {
+  nodeModules[mod] = 'commonjs ' + mod;
+});
 
 module.exports = {
   eslint: {
@@ -7,18 +17,14 @@ module.exports = {
     failOnWarning: true,
     failOnError: true
   },
-  context: __dirname,
-  entry: [
-    './src/index.js'
-  ],
+  entry: './src/index.js',
+  target: 'node',
   output: {
     path: './',
     filename: 'index.js',
-    publicPath: '',
     library: 'inlineCssLoader',
     libraryTarget: 'commonjs2'
   },
-  target: 'node',
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel!eslint', include: path.join(__dirname, 'src')},
@@ -27,5 +33,6 @@ module.exports = {
   },
   plugins: [
     new webpack.NoErrorsPlugin()
-  ]
+  ],
+  externals: nodeModules
 };
