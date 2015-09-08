@@ -1,11 +1,11 @@
-import acorn from 'acorn';
-import _ from 'lodash';
-import escodegen from 'escodegen';
+var acorn = require('acorn');
+var _ = require('lodash');
+var escodegen = require('escodegen');
 
 function getExportsNode(nodes) {
-  let result;
-  _.some(nodes, node => {
-    const exp = node.expression;
+  var result;
+  _.some(nodes, function(node) {
+    var exp = node.expression
     if (exp && exp.type === 'AssignmentExpression' && exp.left.type === 'MemberExpression' && exp.left.object.name === 'exports') {
       if (exp.right.type === 'ObjectExpression') {
         result = exp.right;
@@ -37,7 +37,7 @@ function addToNode(parentNode, childNode) {
     if (childNode.type === 'ObjectExpression') {
       parentNode.properties = parentNode.properties.concat(childNode.properties);
     } else if (childNode.type === 'CallExpression') {
-      const oldProps = _.clone(parentNode.properties);
+      var oldProps = _.clone(parentNode.properties);
       _.extend(parentNode, childNode);
       addToObjectExpressionToCallExpression(parentNode, {properties: oldProps});
     }
@@ -46,7 +46,7 @@ function addToNode(parentNode, childNode) {
       addToObjectExpressionToCallExpression(parentNode, childNode);
     } else if (childNode.type === 'CallExpression') {
       parentNode.arguments.push(childNode.arguments[1]);
-      if (childNode.arguments.length > 2) {
+      if (choldNode.arguments.length > 2) {
         parentNode.arguments.push(childNode.arguments[2]);
       }
     }
@@ -54,21 +54,21 @@ function addToNode(parentNode, childNode) {
 }
 
 function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
-  let newKey;
+  var newKey;
   if (_.startsWith(oldKey, '&')) {
     newKey = oldKey.split('&').join(parentKey);
   } else {
-    newKey = `${parentKey} ${oldKey}`;
+    newKey = parentKey + ' ' + oldKey;
   }
   if (isIdentifier) {
     property.key.type = 'Literal';
   }
   property.key.value = newKey.trim();
-  const index = _.findIndex(parent.properties, p => {
+  var index = _.findIndex(parent.properties, function(p) {
     return p.key && (p.key.value === property.key.value || p.key.name === property.key.value);
   });
   if (index !== -1) {
-    const value = parent.properties[index].value;
+    var value = parent.properties[index].value;
     addToNode(value, property.value);
   } else {
     parent.properties.push(property);
@@ -76,7 +76,10 @@ function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
 }
 
 function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
-  const oldKey = property.key.value || property.key.name || '';
+  var oldKey = property.key.value || property.key.name || '';
+  if (oldKey === 'abba') {
+    console.log(parentKey);
+  }
   if (parentKey === 'mediaQueries') {
     return [object, true];
   }
@@ -85,7 +88,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
     return [parent, false];
   }
   if (_.contains(oldKey, ',')) {
-    _.each(oldKey.split(','), key => {
+    _.each(oldKey.split(','), function(key) {
       key = key.trim();
       addToParent(key, _.cloneDeep(property), parent, parentKey, isIdentifier);
     });
@@ -98,51 +101,50 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
 }
 
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
-  _.each(object.properties, p => {
-    let newParent = object;
-    let resetSkip = true;
-    let skipFlat = skipNextFlat;
-    if (!skipFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && p.value.callee.property.name === '_extends')) && parent) {
-      const flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
+  _.each(object.properties, function(p) {
+    var newParent = object;
+    var resetSkip = true;
+    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && p.value.callee.property.name === '_extends')) && parent) {
+      var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
       newParent = flatResults[0];
-      skipFlat = flatResults[1];
-      if (skipFlat) {
+      skipNextFlat = flatResults[1];
+      if (skipNextFlat) {
         resetSkip = false;
       }
     }
     if (resetSkip) {
-      skipFlat = false;
+      skipNextFlat = false;
     }
 
 
     if (p.value.type === 'ObjectExpression') {
-      flatten(p.value, newParent, p.key.value || p.key.name, false, skipFlat);
+      flatten(p.value, newParent, p.key.value || p.key.name, false, skipNextFlat);
     } else if (p.value.type === 'CallExpression') {
-      _.each(p.value.arguments, a => {
+      _.each(p.value.arguments, function(a) {
         if (a.type === 'ObjectExpression') {
-          flatten(a, newParent, p.key.value || p.key.name, false, skipFlat);
+          flatten(a, newParent, p.key.value || p.key.name, false, skipNextFlat);
         }
       });
     }
   });
-  object.properties = _.filter(object.properties, p => {
+  object.properties = _.filter(object.properties, function(p) {
     if (p.value && p.value.properties && _.isEmpty(p.value.properties)) {
       return false;
     }
     return true;
-  });
+  })
 }
 
-export default function inlineCssLoader(content) {
+module.exports = function(content, map) {
   if (this.cacheable) {
     this.cacheable();
   }
 
-  const tree = acorn.parse(content, {
+  var tree = acorn.parse(content, {
     ecmaVersion: 6,
     sourceType: 'module'
   });
-  const exportNode = getExportsNode(tree.body);
+  var exportNode = getExportsNode(tree.body);
   flatten(exportNode, exportNode, '', true);
   return escodegen.generate(tree);
 }
