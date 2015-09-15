@@ -104,7 +104,7 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   _.each(object.properties, function(p) {
     var newParent = object;
     var resetSkip = true;
-    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && p.value.callee.property.name === '_extends')) && parent) {
+    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && (p.value.callee.name === '_extends' || p.value.callee.property.name))) && parent) {
       var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
       newParent = flatResults[0];
       skipNextFlat = flatResults[1];
@@ -116,13 +116,12 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
       skipNextFlat = false;
     }
 
-
     if (p.value.type === 'ObjectExpression') {
-      flatten(p.value, newParent, p.key.value || p.key.name, false, skipNextFlat);
+      flatten(p.value, newParent, (p.key.value || p.key.name), false, skipNextFlat);
     } else if (p.value.type === 'CallExpression') {
       _.each(p.value.arguments, function(a) {
         if (a.type === 'ObjectExpression') {
-          flatten(a, newParent, p.key.value || p.key.name, false, skipNextFlat);
+          flatten(a, newParent, (p.key.value || p.key.name), false, skipNextFlat);
         }
       });
     }
