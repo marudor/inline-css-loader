@@ -6,7 +6,7 @@ function getExportsNode(nodes) {
   var result;
   _.some(nodes, function(node) {
     var exp = node.expression
-    if (exp && exp.type === 'AssignmentExpression' && exp.left.type === 'MemberExpression' && exp.left.object.name === 'exports') {
+    if (exp && exp.type === 'AssignmentExpression' && exp.left.type === 'MemberExpression' && (exp.left.object.name === 'exports' || exp.left.property.name === 'exports')) {
       if (exp.right.type === 'ObjectExpression') {
         result = exp.right;
         return true;
@@ -77,22 +77,28 @@ function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
 
 function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
   var oldKey = property.key.value || property.key.name || '';
-  if (oldKey === 'abba') {
-    console.log(parentKey);
-  }
   if (parentKey === 'mediaQueries') {
     return [object, true];
   }
 
-  if (_.contains(oldKey, '@media')) {
+  if (_.contains(parentKey, '@media')) {
+    return [parent, false];
+  }
+  if (property.removed) {
     return [parent, false];
   }
   if (_.contains(oldKey, ',')) {
     _.each(oldKey.split(','), function(key) {
       key = key.trim();
-      addToParent(key, _.cloneDeep(property), parent, parentKey, isIdentifier);
+      const newProp = _.cloneDeep(property);
+      newProp.key.value = key;
+      addToParent(key, newProp, parent, parentKey, isIdentifier);
     });
     object.properties = _.without(object.properties, property);
+    if (property.value.type === 'ObjectExpression') {
+      _.each(property.value.properties, p => p.removed = true);
+    }
+    return true;
   } else if (!isFirst) {
     addToParent(oldKey, property, parent, parentKey, isIdentifier);
     object.properties = _.without(object.properties, property);
@@ -101,15 +107,20 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
 }
 
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
+  let redoParent = false;
   _.each(object.properties, function(p) {
     var newParent = object;
     var resetSkip = true;
     if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && (p.value.callee.name === '_extends' || p.value.callee.property.name))) && parent) {
       var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
-      newParent = flatResults[0];
-      skipNextFlat = flatResults[1];
-      if (skipNextFlat) {
-        resetSkip = false;
+      if (flatResults === true) {
+        redoParent = true;
+      } else {
+        newParent = flatResults[0];
+        skipNextFlat = flatResults[1];
+        if (skipNextFlat) {
+          resetSkip = false;
+        }
       }
     }
     if (resetSkip) {
@@ -131,10 +142,13 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
       return false;
     }
     return true;
-  })
+  });
+  if (redoParent) {
+    flatten(parent, null, null, false, false);
+  }
 }
 
-module.exports = function(content, map) {
+function main(content, map) {
   if (this.cacheable) {
     this.cacheable();
   }
@@ -147,3 +161,12 @@ module.exports = function(content, map) {
   flatten(exportNode, exportNode, '', true);
   return escodegen.generate(tree);
 }
+
+main.getExportsNode = getExportsNode;
+main.addToObjectExpressionToCallExpression = addToObjectExpressionToCallExpression;
+main.addToNode = addToNode;
+main.addToParent = addToParent;
+main.flat = flat;
+main.flatten = flatten;
+
+module.exports = main;
