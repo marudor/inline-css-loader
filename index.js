@@ -107,7 +107,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
 }
 
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
-  let redoParent = false;
+  var redoParent = false;
   _.each(object.properties, function(p) {
     var newParent = object;
     var resetSkip = true;
