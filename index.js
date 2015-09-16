@@ -96,7 +96,9 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
     });
     object.properties = _.without(object.properties, property);
     if (property.value.type === 'ObjectExpression') {
-      _.each(property.value.properties, p => p.removed = true);
+      _.each(property.value.properties, function(p) {
+        p.removed = true;
+      });
     }
     return true;
   } else if (!isFirst) {
