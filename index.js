@@ -46,7 +46,7 @@ function addToNode(parentNode, childNode) {
       addToObjectExpressionToCallExpression(parentNode, childNode);
     } else if (childNode.type === 'CallExpression') {
       parentNode.arguments.push(childNode.arguments[1]);
-      if (choldNode.arguments.length > 2) {
+      if (childNode.arguments.length > 2) {
         parentNode.arguments.push(childNode.arguments[2]);
       }
     }
