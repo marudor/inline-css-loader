@@ -5,7 +5,7 @@ module.exports = function (wallaby) {
       'index.js',
       'test/exportNode/*.js',
       'test/fullObjects/*.js',
-      'test/transforms/*.js'
+      'test/transforms/*'
     ],
 
     tests: [

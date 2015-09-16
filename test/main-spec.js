@@ -53,4 +53,14 @@ describe('inline CSS Loader', () => {
     });
   });
 
+  require.extensions['.txt'] = function (module, filename) {
+    module.exports = fs.readFileSync(filename, 'utf8');
+};
+
+  it('complexRealTransform', () => {
+    const inp = require('./transforms/complexRealIn.txt');
+    const out = require('./transforms/complexRealOut.txt');
+    const generatedFromTree = escodegen.generate(parse(out));
+    expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp))
+  })
 });

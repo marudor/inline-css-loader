@@ -84,7 +84,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
   if (_.contains(parentKey, '@media')) {
     return [parent, false];
   }
-  if (property.removed) {
+  if (property.visited) {
     return [parent, false];
   }
   if (_.contains(oldKey, ',')) {
@@ -97,11 +97,12 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
     object.properties = _.without(object.properties, property);
     if (property.value.type === 'ObjectExpression') {
       _.each(property.value.properties, function(p) {
-        p.removed = true;
+        p.visited = true;
       });
     }
     return true;
   } else if (!isFirst) {
+    property.visited = true;
     addToParent(oldKey, property, parent, parentKey, isIdentifier);
     object.properties = _.without(object.properties, property);
   }
