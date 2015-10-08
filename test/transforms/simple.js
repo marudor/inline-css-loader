@@ -12,7 +12,7 @@ exports['default'] = {
       width: 200
     },
     '&.bar': {
-      width: 300
+      width: getWidth()
     }
   }
 };
@@ -30,7 +30,7 @@ exports['default'] = {
     width: 200
   },
   '.foo.bar': {
-    width: 300
+    width: getWidth()
   }
 };
 module.exports = exports['default'];`;

@@ -114,7 +114,7 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   _.each(object.properties, function(p) {
     var newParent = object;
     var resetSkip = true;
-    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && (p.value.callee.name === '_extends' || p.value.callee.property.name))) && parent) {
+    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && ((p.value.callee && p.value.callee.name === '_extends') || (p.value.callee.property && p.value.callee.property.name)))) && parent) {
       var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
       if (flatResults === true) {
         redoParent = true;
