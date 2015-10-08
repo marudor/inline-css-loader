@@ -77,8 +77,10 @@ function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
 
 function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
   var oldKey = property.key.value || property.key.name || '';
-  if (parentKey === 'mediaQueries') {
-    return [object, true];
+  const tempObject = object.value ? object.value : object;
+  const parentOfParent = property.parent.parent;
+  if (parentKey === 'mediaQueries' || (parentOfParent && parentOfParent.key && parentOfParent.key.name === 'mediaQueries')) {
+    return [tempObject, true];
   }
 
   if (_.contains(parentKey, '@media')) {
@@ -94,7 +96,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
       newProp.key.value = key;
       addToParent(key, newProp, parent, parentKey, isIdentifier);
     });
-    object.properties = _.without(object.properties, property);
+    tempObject.properties = _.without(tempObject.properties, property);
     if (property.value.type === 'ObjectExpression') {
       _.each(property.value.properties, function(p) {
         p.visited = true;
@@ -104,16 +106,18 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
   } else if (!isFirst) {
     property.visited = true;
     addToParent(oldKey, property, parent, parentKey, isIdentifier);
-    object.properties = _.without(object.properties, property);
+    tempObject.properties = _.without(tempObject.properties, property);
   }
   return [parent, false];
 }
 
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   var redoParent = false;
-  _.each(object.properties, function(p) {
-    var newParent = object;
+  const tempObject = object.value ? object.value : object;
+  _.each(tempObject.properties, function(p) {
+    var newParent = tempObject;
     var resetSkip = true;
+    p.parent = object;
     if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && ((p.value.callee && p.value.callee.name === '_extends') || (p.value.callee.property && p.value.callee.property.name === '_extends')))) && parent) {
       var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
       if (flatResults === true) {
@@ -129,9 +133,8 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
     if (resetSkip) {
       skipNextFlat = false;
     }
-
     if (p.value.type === 'ObjectExpression') {
-      flatten(p.value, newParent, (p.key.value || p.key.name), false, skipNextFlat);
+      flatten(p, newParent, (p.key.value || p.key.name), false, skipNextFlat);
     } else if (p.value.type === 'CallExpression') {
       _.each(p.value.arguments, function(a) {
         if (a.type === 'ObjectExpression') {

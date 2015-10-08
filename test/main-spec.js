@@ -62,5 +62,12 @@ describe('inline CSS Loader', () => {
     const out = require('./transforms/complexRealOut.txt');
     const generatedFromTree = escodegen.generate(parse(out));
     expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp))
+  });
+
+  it('mediaQuery', () => {
+    const inp = require('./transforms/mediaQueryIn.txt');
+    const out = require('./transforms/mediaQueryOut.txt');
+    const generatedFromTree = escodegen.generate(parse(out));
+    expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp));
   })
 });

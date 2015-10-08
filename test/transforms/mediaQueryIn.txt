@@ -1,0 +1,26 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = {
+  mediaQueries: {
+    '(max-width: 1400px)': {
+      '.foo': {
+        width: 100
+      },
+      '#bla': {
+        height: 100
+      }
+    },
+    '(max-width: 1200px)': {
+      '.bar': {
+        height: 100
+      },
+      '#bla': {
+        height: 200
+      }
+    },
+  }
+};
+module.exports = exports['default'];
