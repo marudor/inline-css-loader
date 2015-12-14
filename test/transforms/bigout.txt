@@ -1,0 +1,130 @@
+'use strict';
+exports.default = {
+	'.popupWrapper .green': { color: _theme2.default.green },
+	'.popupWrapper .red': { color: _theme2.default.red },
+	'.popupWrapper .Select-value': { pointerEvents: 'none' },
+	'.popupWrapper .inputIcon': {
+		borderBottom: `1px solid ${ _theme2.default.grey }`,
+		borderRight: `1px solid ${ _theme2.default.grey }`,
+		flexShrink: 0,
+		lineHeight: '40px',
+		textAlign: 'center',
+		width: 80
+	},
+	'.popupWrapper .inputIcon.descriptionIcon': { borderRight: 'none' },
+	'.popupWrapper .inputIcon.informationIcon.empty': { borderBottom: `1px solid ${ _theme2.default.grey }` },
+	'.popupWrapper .inputIcon.documentIcon.empty': { borderBottom: `1px solid ${ _theme2.default.grey }` },
+	'.popupWrapper .inputIcon.informationIcon.hasContent': { borderBottom: 'none' },
+	'.popupWrapper .inputIcon.documentIcon.hasContent': { borderBottom: 'none' },
+	'.popupWrapper .dateSelect': { '.dateInput': babelHelpers.extends({}, _theme2.default.mixins.flex.full, { border: 'none' }) },
+	'.popupWrapper .dateSelect .dateRangeButton': {
+		backgroundColor: _theme2.default.blue,
+		borderRadius: 5,
+		color: _theme2.default.white,
+		margin: '0 5px',
+		padding: '5px 10px',
+		textAlign: 'center',
+		width: '50%'
+	},
+	'.popupWrapper .dateSelect .dateRangeButton:hover': { backgroundColor: (0, _color2.default)(_theme2.default.blue).lighten(0.05).rgbString() },
+	'.popupWrapper .dateSelect .rangeButtonRow': { padding: '5px 30px' },
+	'.popupWrapper .dateSelect .rangeButtonRow:first-child': { paddingTop: 10 },
+	'.popupWrapper .dateSelect .startEndDate .inputIcon': { border: 'none' },
+	'.popupWrapper .textarea.toggableInput > :last-child': { marginBottom: 10 },
+	'.popupWrapper .textarea.toggableInput > *': {
+		marginBottom: 0,
+		marginTop: 10,
+		lineHeight: 1.5
+	},
+	'.popupWrapper .textarea.toggableInput ul': { paddingLeft: 15 },
+	'.popupWrapper .textarea-container textarea': { border: 'none !important' },
+	'.popupWrapper .notesContainer': {
+		'.notesEdit': babelHelpers.extends({}, _theme2.default.mixins.flex.fullRow, {
+			borderBottom: `1px solid ${ _theme2.default.grey }`,
+			'.toggableInput': babelHelpers.extends({}, _theme2.default.mixins.flex.full, { lineHeight: '40px' }),
+			'> :not(.toggableInput)': babelHelpers.extends({}, _theme2.default.mixins.flex.fullRow, { paddingLeft: 15 })
+		}),
+		'.notesEdit .addNote': {
+			bottom: 10,
+			color: _theme2.default.blue,
+			position: 'absolute',
+			right: 10
+		},
+		'.notesEdit textarea-container': {
+			border: 'none',
+			borderRadius: 0,
+			margin: 0,
+			padding: '10px 10px 0 15px'
+		}
+	},
+	'.popupWrapper .notesContainer .listSelect .singleNote': {
+		maxHeight: 115,
+		overflowX: 'hidden',
+		overflowY: 'scroll',
+		'.singleNoteContent': babelHelpers.extends({}, _theme2.default.mixins.flex.row, {
+			justifyContent: 'space-between',
+			paddingRight: 15
+		}),
+		'.singleNoteContent .textarea-container': {
+			border: 'none',
+			margin: 0,
+			padding: 0
+		}
+	},
+	'.popupWrapper .notesContainer .listSelect .singleNote::-webkit-scrollbar': { display: 'none' },
+	'.popupWrapper .notesContainer .listSelect .singleNote.active': { maxHeight: '100%' },
+	'.popupWrapper .notesContainer .listSelect .singleNote.active .singleNoteContent': {
+		paddingLeft: 15,
+		paddingBottom: 0
+	},
+	'.popupWrapper .notesContainer .listSelect .singleNote.active .noteMetaData': { display: 'none' },
+	'.popupWrapper .notesContainer .singleNote': { borderBottom: `1px solid ${ _theme2.default.grey }` },
+	'.popupWrapper .notesContainer .singleNote .singleNoteContent': {
+		borderLeft: `1px solid ${ _theme2.default.grey }`,
+		marginLeft: 79,
+		padding: '10px 40px 10px 15px',
+		lineHeight: 1.5,
+		'.noteMetaData': babelHelpers.extends({}, _theme2.default.mixins.flex.row, {
+			alignContent: 'flex-end',
+			color: _theme2.default.grey,
+			fontSize: _theme2.default.fontSmall,
+			justifyContent: 'flex-end',
+			marginTop: 4
+		})
+	},
+	'.popupWrapper .notesContainer .singleNote .singleNoteContent .toggableInput > :last-child': { marginBottom: 0 },
+	'.popupWrapper .notesContainer .singleNote .singleNoteContent .toggableInput > :first-child': { marginTop: 0 },
+	'.popupWrapper .documentContainer': {
+		'.toggableInput': babelHelpers.extends({}, _theme2.default.mixins.flex.full, {
+			borderBottom: `1px solid ${ _theme2.default.grey }`,
+			lineHeight: '40px',
+			paddingLeft: 15
+		}),
+		'.documentList': babelHelpers.extends({}, _theme2.default.mixins.flex.row, {
+			justifyContent: 'space-between',
+			borderLeft: `1px solid ${ _theme2.default.grey }`,
+			marginLeft: 79,
+			padding: '12px 15px 3px 15px',
+			'.downloadFile': babelHelpers.extends({}, _theme2.default.mixins.flex.fullRow, {
+				justifyContent: 'space-between',
+				marginBottom: 10
+			}),
+			'.downloadFile .startDownload': {
+				cursor: 'pointer',
+				marginRight: 10
+			}
+		})
+	},
+	'.popupWrapper .documentContainer .uploadSuccess': {
+		borderBottom: `1px solid ${ _theme2.default.grey }`,
+		paddingRight: 40,
+		paddingTop: 13,
+		color: _theme2.default.success
+	},
+	'.popupWrapper .documentContainer .uploadError': {
+		borderBottom: `1px solid ${ _theme2.default.grey }`,
+		paddingRight: 40,
+		paddingTop: 13,
+		color: _theme2.default.error
+	}
+};
