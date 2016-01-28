@@ -120,35 +120,37 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   var redoParent = false;
   const tempObject = object.value ? object.value : object;
-  tempObject.properties.forEach(function(p) {
-    var newParent = tempObject;
-    var resetSkip = true;
-    p.parent = object;
-    if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && ((p.value.callee && (p.value.callee.name === '_extends' || p.value.callee.name === 'extends')) || (p.value.callee.property && (p.value.callee.property.name === '_extends' || p.value.callee.property.name === 'extends'))))) && parent) {
-      var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
-      if (flatResults === true) {
-        redoParent = true;
-      } else {
-        newParent = flatResults[0];
-        skipNextFlat = flatResults[1];
-        if (skipNextFlat) {
-          resetSkip = false;
+  if (tempObject.properties) {
+    tempObject.properties.forEach(function(p) {
+      var newParent = tempObject;
+      var resetSkip = true;
+      p.parent = object;
+      if (!skipNextFlat && (p.key.type === 'Literal' || p.key.type === 'Identifier') && (p.value.type === 'ObjectExpression' || (p.value.type === 'CallExpression' && ((p.value.callee && (p.value.callee.name === '_extends' || p.value.callee.name === 'extends')) || (p.value.callee.property && (p.value.callee.property.name === '_extends' || p.value.callee.property.name === 'extends'))))) && parent) {
+        var flatResults = flat(p, parent, parentKey, p.key.type === 'Identifier', object, isFirst);
+        if (flatResults === true) {
+          redoParent = true;
+        } else {
+          newParent = flatResults[0];
+          skipNextFlat = flatResults[1];
+          if (skipNextFlat) {
+            resetSkip = false;
+          }
         }
       }
-    }
-    if (resetSkip) {
-      skipNextFlat = false;
-    }
-    if (p.value.type === 'ObjectExpression') {
-      flatten(p, newParent, (p.key.value || p.key.name), false, skipNextFlat);
-    } else if (p.value.type === 'CallExpression') {
-      p.value.arguments.forEach(function(a) {
-        if (a.type === 'ObjectExpression') {
-          flatten(a, newParent, (p.key.value || p.key.name), false, skipNextFlat);
-        }
-      });
-    }
-  });
+      if (resetSkip) {
+        skipNextFlat = false;
+      }
+      if (p.value.type === 'ObjectExpression') {
+        flatten(p, newParent, (p.key.value || p.key.name), false, skipNextFlat);
+      } else if (p.value.type === 'CallExpression') {
+        p.value.arguments.forEach(function(a) {
+          if (a.type === 'ObjectExpression') {
+            flatten(a, newParent, (p.key.value || p.key.name), false, skipNextFlat);
+          }
+        });
+      }
+    });
+  }
   if (object.properties) {
     object.properties = object.properties.filter(function(p) {
       if (p.value && p.value.properties && isEmpty(p.value.properties)) {
