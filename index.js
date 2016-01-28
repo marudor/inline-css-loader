@@ -1,10 +1,12 @@
 var acorn = require('acorn');
-var _ = require('lodash');
 var escodegen = require('escodegen');
+var isEmpty = require('lodash.isempty');
+var cloneDeep = require('lodash.cloneDeep');
+var without = require('lodash.without');
 
 function getExportsNode(nodes) {
   var result;
-  _.some(nodes, function(node) {
+  nodes.some(function(node) {
     if (node.type === 'ExportDefaultDeclaration') {
       result = node.declaration;
       return true;
@@ -15,7 +17,7 @@ function getExportsNode(nodes) {
         result = exp.right;
         return true;
       } else if (exp.right.type === 'CallExpression') {
-        result = _.last(exp.right.arguments);
+        result = exp.right.arguments[exp.right.arguments.length - 1];
         return true;
       }
     }
@@ -41,8 +43,8 @@ function addToNode(parentNode, childNode) {
     if (childNode.type === 'ObjectExpression') {
       parentNode.properties = parentNode.properties.concat(childNode.properties);
     } else if (childNode.type === 'CallExpression') {
-      var oldProps = _.clone(parentNode.properties);
-      _.extend(parentNode, childNode);
+      var oldProps = Object.assign({}, parentNode.properties);
+      Object.assign(parentNode, childNode);
       addToObjectExpressionToCallExpression(parentNode, {properties: oldProps});
     }
   } else if (parentNode.type === 'CallExpression') {
@@ -59,7 +61,7 @@ function addToNode(parentNode, childNode) {
 
 function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
   var newKey;
-  if (_.startsWith(oldKey, '&')) {
+  if (oldKey.indexOf('&') === 0) {
     newKey = oldKey.split('&').join(parentKey);
   } else {
     newKey = parentKey + ' ' + oldKey;
@@ -68,7 +70,7 @@ function addToParent(oldKey, property, parent, parentKey, isIdentifier) {
     property.key.type = 'Literal';
   }
   property.key.value = newKey.trim();
-  var index = _.findIndex(parent.properties, function(p) {
+  var index = parent.properties.findIndex(function(p) {
     return p.key && (p.key.value === property.key.value || p.key.name === property.key.value);
   });
   if (index !== -1) {
@@ -87,22 +89,22 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
     return [tempObject, true];
   }
 
-  if (_.contains(parentKey, '@media')) {
+  if (parentKey.indexOf('@media') !== -1) {
     return [parent, false];
   }
   if (property.visited) {
     return [parent, false];
   }
-  if (_.contains(oldKey, ',')) {
-    _.each(oldKey.split(','), function(key) {
+  if (oldKey.indexOf(',') !== -1) {
+    oldKey.split(',').forEach(function(key) {
       key = key.trim();
-      const newProp = _.cloneDeep(property);
+      const newProp = cloneDeep(property);
       newProp.key.value = key;
       addToParent(key, newProp, parent, parentKey, isIdentifier);
     });
-    tempObject.properties = _.without(tempObject.properties, property);
+    tempObject.properties = without(tempObject.properties, property);
     if (property.value.type === 'ObjectExpression') {
-      _.each(property.value.properties, function(p) {
+      property.value.properties.forEach(function(p) {
         p.visited = true;
       });
     }
@@ -110,7 +112,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
   } else if (!isFirst) {
     property.visited = true;
     addToParent(oldKey, property, parent, parentKey, isIdentifier);
-    tempObject.properties = _.without(tempObject.properties, property);
+    tempObject.properties = without(tempObject.properties, property);
   }
   return [parent, false];
 }
@@ -118,7 +120,7 @@ function flat(property, parent, parentKey, isIdentifier, object, isFirst) {
 function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
   var redoParent = false;
   const tempObject = object.value ? object.value : object;
-  _.each(tempObject.properties, function(p) {
+  tempObject.properties.forEach(function(p) {
     var newParent = tempObject;
     var resetSkip = true;
     p.parent = object;
@@ -140,19 +142,23 @@ function flatten(object, parent, parentKey, isFirst, skipNextFlat) {
     if (p.value.type === 'ObjectExpression') {
       flatten(p, newParent, (p.key.value || p.key.name), false, skipNextFlat);
     } else if (p.value.type === 'CallExpression') {
-      _.each(p.value.arguments, function(a) {
+      p.value.arguments.forEach(function(a) {
         if (a.type === 'ObjectExpression') {
           flatten(a, newParent, (p.key.value || p.key.name), false, skipNextFlat);
         }
       });
     }
   });
-  object.properties = _.filter(object.properties, function(p) {
-    if (p.value && p.value.properties && _.isEmpty(p.value.properties)) {
-      return false;
-    }
-    return true;
-  });
+  if (object.properties) {
+    object.properties = object.properties.filter(function(p) {
+      if (p.value && p.value.properties && isEmpty(p.value.properties)) {
+        return false;
+      }
+      return true;
+    });
+  } else {
+    object.properties = [];
+  }
   if (redoParent) {
     flatten(parent, null, null, false, false);
   }
