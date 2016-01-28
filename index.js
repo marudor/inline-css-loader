@@ -39,6 +39,8 @@ function addToObjectExpressionToCallExpression(call, object) {
 function addToNode(parentNode, childNode) {
   if (parentNode.type === 'ObjectExpression') {
     if (childNode.type === 'ObjectExpression') {
+      const childNodeKeys = _.map(childNode.properties, p => p.key);
+      parentNode.properties = _.filter(parentNode.properties, p => p.key && _.includes(childNodeKeys, p.key.name));
       parentNode.properties = parentNode.properties.concat(childNode.properties);
     } else if (childNode.type === 'CallExpression') {
       var oldProps = _.clone(parentNode.properties);
