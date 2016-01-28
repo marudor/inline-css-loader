@@ -5,7 +5,11 @@ var escodegen = require('escodegen');
 function getExportsNode(nodes) {
   var result;
   _.some(nodes, function(node) {
-    var exp = node.expression
+    if (node.type === 'ExportDefaultDeclaration') {
+      result = node.declaration;
+      return true;
+    }
+    var exp = node.expression;
     if (exp && exp.type === 'AssignmentExpression' && exp.left.type === 'MemberExpression' && (exp.left.object.name === 'exports' || exp.left.property.name === 'exports')) {
       if (exp.right.type === 'ObjectExpression') {
         result = exp.right;

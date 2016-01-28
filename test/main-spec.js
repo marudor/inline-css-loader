@@ -4,40 +4,44 @@ import path from 'path';
 const expect = chai.expect;
 import { parse } from 'acorn';
 import escodegen from 'escodegen';
-import _ from 'lodash';
+const parseCode = (input) => parse(input, {
+  ecmaVersion: 6,
+  sourceType: 'module',
+});
 
 import inlineCssLoader, { getExportsNode } from '../index.js';
 
 describe('inline CSS Loader', () => {
     const exportNodes = [];
     exportNodes.push(require('./exportNode/es5').default);
+    exportNodes.push(require('./exportNode/es6').default);
     exportNodes.push(require('./exportNode/babel').default);
     exportNodes.push(require('./exportNode/babelLoose').default);
     exportNodes.push(require('./exportNode/babelSpread').default);
     exportNodes.push(require('./exportNode/babelRuntimeSpread').default);
     it('should find nodes', () => {
-      _.each(exportNodes, n => {
-        const tree = parse(n);
+      exportNodes.forEach(n => {
+        const tree = parseCode(n);
         expect(tree).to.exist;
         const root = getExportsNode(tree.body);
         expect(root).to.exist;
       });
     });
 
-    const fullParse = [];
-    fullParse.push(require('./fullObjects/simple').default);
-    fullParse.push(require('./fullObjects/spread').default);
-    fullParse.push(require('./fullObjects/media').default);
-    it('parse, doNothing', () => {
-      _.each(fullParse, obj => {
-        const generatedFromTree = escodegen.generate(parse(obj));
+    const fullparseCode = [];
+    fullparseCode.push(require('./fullObjects/simple').default);
+    fullparseCode.push(require('./fullObjects/spread').default);
+    fullparseCode.push(require('./fullObjects/media').default);
+    it('parseCode, doNothing', () => {
+      fullparseCode.forEach(obj => {
+        const generatedFromTree = escodegen.generate(parseCode(obj));
         expect(generatedFromTree).to.equal(inlineCssLoader.call({}, obj));
       })
     });
   //
     it('temp', () => {
       const temp = require('./transforms/complex');
-      const generatedFromTree = escodegen.generate(parse(temp.output));
+      const generatedFromTree = escodegen.generate(parseCode(temp.output));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, temp.input));
     });
   //
@@ -47,8 +51,8 @@ describe('inline CSS Loader', () => {
     transforms.push(require('./transforms/complex'));
 
     it('transforms', () => {
-      _.each(transforms, t => {
-        const generatedFromTree = escodegen.generate(parse(t.output));
+      transforms.forEach(t => {
+        const generatedFromTree = escodegen.generate(parseCode(t.output));
         expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
       });
     });
@@ -60,20 +64,24 @@ describe('inline CSS Loader', () => {
     it('complexRealTransform', () => {
       const inp = require('./transforms/complexRealIn.txt');
       const out = require('./transforms/complexRealOut.txt');
-      const generatedFromTree = escodegen.generate(parse(out));
+      const generatedFromTree = escodegen.generate(parseCode(out));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp))
+      const inpES6 = require('./transforms/complexRealInES6.txt');
+      const outES6 = require('./transforms/complexRealOutES6.txt');
+      const generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
+      expect(generatedFromTreeES6).to.equal(inlineCssLoader.call({}, inpES6))
     });
 
     it('mediaQuery', () => {
       const inp = require('./transforms/mediaQueryIn.txt');
       const out = require('./transforms/mediaQueryOut.txt');
-      const generatedFromTree = escodegen.generate(parse(out));
+      const generatedFromTree = escodegen.generate(parseCode(out));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp));
     });
-  // it('realExample1', () => {
-  //   const inp = require('./transforms/bigIn.txt');
-  //   const out = require('./transforms/bigOut.txt');
-  //   const generatedFromTree = escodegen.generate(parse(out));
-  //   expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp));
-  // });
+
+    it ('simpleES6', () => {
+      const t = require('./simple/simpleES6');
+      const generatedFromTree = escodegen.generate(parseCode(t.output));
+      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
+    });
 });
