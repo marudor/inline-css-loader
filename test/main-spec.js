@@ -80,11 +80,21 @@ describe('inline CSS Loader', () => {
   });
 
   const simple = [];
+  simple.push(require('./simple/simple'));
   simple.push(require('./simple/simpleES6'));
   simple.push(require('./simple/simpleOverride'));
 
   it ('simple', () => {
     simple.forEach(t => {
+      const generatedFromTree = escodegen.generate(parseCode(t.output));
+      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
+    });
+  });
+
+  const big = [];
+
+  it ('big', () => {
+    big.forEach(t => {
       const generatedFromTree = escodegen.generate(parseCode(t.output));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
     });
