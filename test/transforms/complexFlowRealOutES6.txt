@@ -1,0 +1,126 @@
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _buttons = require('./buttons.CSS');
+
+var _buttons2 = _interopRequireDefault(_buttons);
+
+var _checkboxes = require('./checkboxes.CSS');
+
+var _checkboxes2 = _interopRequireDefault(_checkboxes);
+
+var _checkRadio = require('./checkRadio.CSS');
+
+var _checkRadio2 = _interopRequireDefault(_checkRadio);
+
+var _colors = require('./colors.CSS');
+
+var _colors2 = _interopRequireDefault(_colors);
+
+var _daterange = require('./daterange.CSS');
+
+var _daterange2 = _interopRequireDefault(_daterange);
+
+var _daterangepicker = require('./daterangepicker.CSS');
+
+var _daterangepicker2 = _interopRequireDefault(_daterangepicker);
+
+var _dialogs = require('./dialogs.CSS');
+
+var _dialogs2 = _interopRequireDefault(_dialogs);
+
+var _floatingLabel = require('./floatingLabel.CSS');
+
+var _floatingLabel2 = _interopRequireDefault(_floatingLabel);
+
+var _htmlElements = require('./htmlElements.CSS');
+
+var _htmlElements2 = _interopRequireDefault(_htmlElements);
+
+var _icons = require('./icons.CSS');
+
+var _icons2 = _interopRequireDefault(_icons);
+
+var _kendo = require('./kendo.CSS');
+
+var _kendo2 = _interopRequireDefault(_kendo);
+
+var _misc = require('./misc.CSS');
+
+var _misc2 = _interopRequireDefault(_misc);
+
+var _popupContent = require('./popupContent.CSS');
+
+var _popupContent2 = _interopRequireDefault(_popupContent);
+
+var _scrollbar = require('./scrollbar.CSS');
+
+var _scrollbar2 = _interopRequireDefault(_scrollbar);
+
+var _select = require('./select.CSS');
+
+var _select2 = _interopRequireDefault(_select);
+
+var _templatePopupCSS = require('./templatePopup.CSS.js');
+
+var _templatePopupCSS2 = _interopRequireDefault(_templatePopupCSS);
+
+var _theme = require('theme');
+
+var _theme2 = _interopRequireDefault(_theme);
+
+var _tooltip = require('./tooltip.CSS');
+
+var _tooltip2 = _interopRequireDefault(_tooltip);
+
+var _tutorialPopupCSS = require('./tutorialPopup.CSS.js');
+
+var _tutorialPopupCSS2 = _interopRequireDefault(_tutorialPopupCSS);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var baseStyle = _extends({}, _daterange2.default, _buttons2.default, _checkboxes2.default, _checkRadio2.default, _colors2.default, _daterangepicker2.default, _dialogs2.default, _floatingLabel2.default, _htmlElements2.default, _icons2.default, _kendo2.default, _misc2.default, _popupContent2.default, _select2.default, _templatePopupCSS2.default, _tooltip2.default, _tutorialPopupCSS2.default, {
+  '#factro': _extends({}, _theme2.default.mixins.flex.flex, {
+    height: '100%',
+    position: 'relative'
+  }),
+  '.block-ellipsis': {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
+  },
+  '.vex': {
+    zIndex: 5000
+  },
+  '.Select-option': {
+    cursor: 'pointer',
+    overflow: 'hidden',
+    padding: 0,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
+  },
+  '.Select-option.is-selected': {
+    color: _theme2.default.blue,
+    fontWeight: 400
+  },
+  '.Select-option.is-focused': {
+    color: _theme2.default.fontColor,
+    fontWeight: 700
+  },
+  '.Select-option.is-selected.is-focused': {
+    color: _theme2.default.blue,
+    fontWeight: 700
+  },
+  '.Select-noresults': {
+    display: 'none'
+  },
+  '.dz-preview': {
+    display: 'none'
+  }
+});
+
+if (__PROD__) {
+  baseStyle = _extends({}, _scrollbar2.default, baseStyle);
+}
+exports.default = baseStyle;

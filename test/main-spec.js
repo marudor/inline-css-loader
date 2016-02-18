@@ -1,6 +1,5 @@
 import chai from 'chai';
 import fs from 'fs';
-import path from 'path';
 const expect = chai.expect;
 import { parse } from 'acorn';
 import escodegen from 'escodegen';
@@ -36,7 +35,7 @@ describe('inline CSS Loader', () => {
     fullparseCode.forEach(obj => {
       const generatedFromTree = escodegen.generate(parseCode(obj));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, obj));
-    })
+    });
   });
   //
   it('temp', () => {
@@ -53,11 +52,11 @@ describe('inline CSS Loader', () => {
   it('transforms', () => {
     transforms.forEach(t => {
       const generatedFromTree = escodegen.generate(parseCode(t.output));
-      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
+      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input));
     });
   });
 
-  require.extensions['.txt'] = function (module, filename) {
+  require.extensions['.txt'] = function(module, filename) {
     module.exports = fs.readFileSync(filename, 'utf8');
   };
 
@@ -65,11 +64,16 @@ describe('inline CSS Loader', () => {
     const inp = require('./transforms/complexRealIn.txt');
     const out = require('./transforms/complexRealOut.txt');
     const generatedFromTree = escodegen.generate(parseCode(out));
-    expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp))
-    const inpES6 = require('./transforms/complexRealInES6.txt');
-    const outES6 = require('./transforms/complexRealOutES6.txt');
-    const generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
-    expect(generatedFromTreeES6).to.equal(inlineCssLoader.call({}, inpES6))
+    expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp));
+    let inpES6 = require('./transforms/complexRealInES6.txt');
+    let outES6 = require('./transforms/complexRealOutES6.txt');
+    let generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
+    expect(generatedFromTreeES6).to.equal(inlineCssLoader.call({}, inpES6));
+    
+    inpES6 = require('./transforms/complexFlowRealInES6.txt');
+    outES6 = require('./transforms/complexFlowRealOutES6.txt');
+    generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
+    expect(generatedFromTreeES6).to.equal(inlineCssLoader.call({}, inpES6));
   });
 
   it('mediaQuery', () => {
@@ -84,19 +88,19 @@ describe('inline CSS Loader', () => {
   simple.push(require('./simple/simpleES6'));
   simple.push(require('./simple/simpleOverride'));
 
-  it ('simple', () => {
+  it('simple', () => {
     simple.forEach(t => {
       const generatedFromTree = escodegen.generate(parseCode(t.output));
-      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
+      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input));
     });
   });
 
   const big = [];
 
-  it ('big', () => {
+  it('big', () => {
     big.forEach(t => {
       const generatedFromTree = escodegen.generate(parseCode(t.output));
-      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input))
+      expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input));
     });
   });
 });

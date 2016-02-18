@@ -1,3 +1,5 @@
+import foo from 'bar';
+
 export default {
     '.a .b .c': {
       x: 1
