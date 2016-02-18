@@ -1,0 +1,7 @@
+{
+  "extends": "marudor/noReact",
+  "env": {
+    "node": true,
+    "mocha": true
+  }
+}
