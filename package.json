@@ -45,7 +45,7 @@
     "webpack": "^1.12.1"
   },
   "dependencies": {
-    "acorn": "^3.0.2",
+    "acorn": "^3.0.4",
     "escodegen": "^1.6.1",
     "lodash": "^4.0.1"
   },
