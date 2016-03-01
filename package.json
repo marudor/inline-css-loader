@@ -9,11 +9,10 @@
   "repository": "marudor/inline-css-loader",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rm -rf kub && babel *.js -d lib",
-    "prepublish": "npm run test && npm run build",
+    "build": "rm -rf lib && babel *.js -d lib",
     "test": "npm run lint && npm run mocha",
     "lint": "eslint *.js",
-    "mocha": "mocha --compilers js:babel-register test"
+    "mocha": "mocha --compilers js:babel-register $MOCHA_OPTIONS test"
   },
   "files": [
     "lib"
