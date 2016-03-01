@@ -42,7 +42,7 @@
     "eslint-plugin-flow-vars": "^0.2.0",
     "json-loader": "^0.5.2",
     "mocha": "^2.3.4",
-    "webpack": "^1.12.1"
+    "webpack": "^1.12.14"
   },
   "dependencies": {
     "acorn": "^3.0.2",
