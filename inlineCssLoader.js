@@ -30,7 +30,7 @@ function addToObjectExpressionToCallExpression(call, object) {
     } else {
       call.arguments.push({
         type: 'ObjectExpression',
-        properties: object.properties
+        properties: object.properties,
       });
     }
   }
