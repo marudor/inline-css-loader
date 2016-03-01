@@ -2,4 +2,4 @@ machine:
   node:
     version: 5.7.0
   environment:
-    MOCHA_OPTIONS: --reporter mocha-circleci-reporter
+    MOCHA_OPTIONS: --reporter mocha-junit-reporter --reporter-options mochaFile=./$CIRCLE_TEST_REPORTS/tests.xml
