@@ -47,8 +47,8 @@
   "dependencies": {
     "acorn": "^3.0.2",
     "escodegen": "^1.6.1",
-    "eslint-plugin-flow-vars": "^0.2.1",
-    "lodash": "^4.0.1"
+    "lodash": "^4.0.1",
+    "npm": "^3.7.5"
   },
   "maintainers": [
     {
