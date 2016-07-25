@@ -9,6 +9,13 @@ function getExportsNode(nodes) {
       result = node.declaration;
       return true;
     }
+    if (node.type === 'VariableDeclaration') {
+      const declaration = node.declarations[0];
+      if (declaration.id.name === '_unused_webpack_default_export') {
+          result = declaration.init;
+          return true;
+      }
+    }
     const exp = node.expression;
     if (exp && exp.type === 'AssignmentExpression' && exp.left.type === 'MemberExpression' && (exp.left.object.name === 'exports' || exp.left.property.name === 'exports')) {
       if (exp.right.type === 'ObjectExpression') {

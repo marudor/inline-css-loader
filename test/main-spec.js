@@ -18,6 +18,8 @@ describe('inline CSS Loader', () => {
   exportNodes.push(require('./exportNode/babelLoose').default);
   exportNodes.push(require('./exportNode/babelSpread').default);
   exportNodes.push(require('./exportNode/babelRuntimeSpread').default);
+  exportNodes.push(require('./exportNode/webpack').default);
+  exportNodes.push(require('./exportNode/webpack2').default);
   it('should find nodes', () => {
     exportNodes.forEach(n => {
       const tree = parseCode(n);
