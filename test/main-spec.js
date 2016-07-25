@@ -20,12 +20,14 @@ describe('inline CSS Loader', () => {
   exportNodes.push(require('./exportNode/babelRuntimeSpread').default);
   exportNodes.push(require('./exportNode/webpack').default);
   exportNodes.push(require('./exportNode/webpack2').default);
+  exportNodes.push(require('./exportNode/webpack3').default);
   it('should find nodes', () => {
     exportNodes.forEach(n => {
       const tree = parseCode(n);
       expect(tree).to.exist;
       const root = getExportsNode(tree.body);
       expect(root).to.exist;
+      expect(root.type).to.equal('ObjectExpression');
     });
   });
 

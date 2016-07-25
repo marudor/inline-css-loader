@@ -27,6 +27,10 @@ function getExportsNode(nodes) {
       }
     }
   });
+  if (result && result.type === 'CallExpression') {
+    const expressions = result.arguments.filter(a => a.type === 'ObjectExpression');
+    result = _.last(expressions);
+  }
   return result;
 }
 
