@@ -1,0 +1,34 @@
+export default {
+  li: {
+    display: 'flex',
+    alignItems: 'center',
+    float: 'left',
+    listStyle: 'none',
+    position: 'relative',
+    height: '100%',
+  },
+  'li > .subMenu': {
+    display: 'block',
+    opacity: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    top: 55,
+    transition: 'all .3s ease .15s',
+    visibility: 'hidden',
+    width: 300,
+    zIndex: 10000,
+    padding: 0,
+  },
+  'li > .subMenu a': {
+    height: 26,
+    lineHeight: '26px',
+  },
+  'li > .subMenu li': {
+    float: 'none',
+  },
+  'li:hover > .subMenu': {
+    opacity: 1,
+    overflow: 'visible',
+    visibility: 'visible',
+  },
+};

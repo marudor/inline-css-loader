@@ -69,7 +69,7 @@ describe('inline CSS Loader', () => {
     let outES6 = require('./transforms/complexRealOutES6.txt');
     let generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
     expect(generatedFromTreeES6).to.equal(inlineCssLoader.call({}, inpES6));
-    
+
     inpES6 = require('./transforms/complexFlowRealInES6.txt');
     outES6 = require('./transforms/complexFlowRealOutES6.txt');
     generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
@@ -102,5 +102,12 @@ describe('inline CSS Loader', () => {
       const generatedFromTree = escodegen.generate(parseCode(t.output));
       expect(generatedFromTree).to.equal(inlineCssLoader.call({}, t.input));
     });
+  });
+
+  it('webpack', () => {
+    const inp = require('./webpackIn.txt');
+    const out = require('./webpackOut.txt');
+    const generatedFromTree = escodegen.generate(parseCode(out));
+    expect(generatedFromTree).to.equal(inlineCssLoader.call({}, inp));
   });
 });
