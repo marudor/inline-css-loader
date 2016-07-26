@@ -2,9 +2,6 @@
   "extends": "marudor/noReact",
   "env": {
     "node": true,
-    "mocha": true
-  },
-  "rules": {
-    "no-unused-expressions": 0
+    "jest": true
   }
 }

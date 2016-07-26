@@ -1,0 +1,3 @@
+exports["default"] = _extends(foo, {
+  foobar: '123',
+});

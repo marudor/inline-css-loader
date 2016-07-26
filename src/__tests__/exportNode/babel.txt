@@ -1,4 +1,4 @@
-export default `'use strict';
+'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -6,4 +6,4 @@ Object.defineProperty(exports, '__esModule', {
 exports['default'] = {
   foo: '123'
 };
-module.exports = exports['default'];`;
+module.exports = exports['default'];

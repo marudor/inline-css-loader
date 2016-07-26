@@ -1,0 +1,13 @@
+export default {
+  '.foo': {
+    'bar': {
+      width: 100
+    },
+    '> batz': {
+      width: 200
+    },
+    '&.bar': {
+      width: 300
+    }
+  }
+};

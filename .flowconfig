@@ -1,0 +1,21 @@
+[ignore]
+.*node_modules/babel-.*
+.*node_modules/bluebird/.*
+.*node_modules/lodash.*
+.*node_modules/jest.*
+.*node_modules/uuid-js.*
+.*node_modules/axios-js.*
+.*node_modules/cli.*
+.*node_modules/koa/.*
+.*node_modules/hazelcast/.*
+.*node_modules/npm/.*
+
+[include]
+
+[libs]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe\\($\\|[^(]\\|(\\(>=0\\.\\(2[0-0]\\|1[0-9]\\|[0-9]\\).[0-9]\\)? *\\(site=[a-z,_]*react_native[a-z,_]*\\)?)\\)
+
+[version]
+>=0.29

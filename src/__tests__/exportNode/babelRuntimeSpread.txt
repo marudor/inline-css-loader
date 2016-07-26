@@ -1,4 +1,4 @@
-export default `'use strict';
+'use strict';
 
 var _extends = require('babel-runtime/helpers/extends')['default'];
 
@@ -12,4 +12,4 @@ var bar = {
 exports['default'] = _extends({}, bar, {
   foo: '123'
 });
-module.exports = exports['default'];`;
+module.exports = exports['default'];

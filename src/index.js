@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import escodegen from 'escodegen';
 import { parse } from 'acorn';
+import escodegen from 'escodegen';
 
 function getExportsNode(nodes) {
   let result;
@@ -22,7 +22,7 @@ function getExportsNode(nodes) {
         result = exp.right;
         return true;
       } else if (exp.right.type === 'CallExpression') {
-        result = _.last(exp.right.arguments);
+        result = _.last(exp.right.arguments.filter(a => a.type === 'ObjectExpression'));
         return true;
       }
     }

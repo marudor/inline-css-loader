@@ -1,0 +1,19 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = {
+  '.foo': {
+    'bar': {
+      width: 100
+    },
+    '> batz': {
+      width: 200
+    },
+    '&.bar': {
+      width: 300
+    }
+  }
+};
+module.exports = exports['default'];

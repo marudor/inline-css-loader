@@ -1,0 +1,10 @@
+export default {
+  '.foo': {
+    '.batz, .bar': {
+      right: 5,
+    },
+    '.bar': {
+      right: 15,
+    },
+  },
+};

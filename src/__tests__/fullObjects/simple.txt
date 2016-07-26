@@ -1,8 +1,8 @@
-export default `'use strict';
+'use strict';
 exports.__esModule = true;
 exports['default'] = {
   '.foobar': {
     width: 100
   }
 };
-module.exports = exports['default'];`;
+module.exports = exports['default'];
