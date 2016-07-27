@@ -1,0 +1,219 @@
+import Theme from 'theme';
+const multiselect = {
+  '.Select--multi': {
+    backgroundColor: Theme.white,
+    minWidth: '300px',
+  },
+  '.psb .Select--multi': {
+    maxWidth: 'none',
+    minWidth: 0,
+  },
+  '.Select--multi .Select-menu-outer': {
+    borderTop: `1px solid ${Theme.grey}`
+  },
+};
+const normal = {
+  '.Select:not(.Select--multi) .Select-control': {
+    backgroundColor: 'transparent',
+    position: 'relative',
+  },
+  '.Select:not(.Select--multi) .Select-control .Select-placeholder': {
+    overflow: 'hidden',
+    position: 'absolute',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  '.Select:not(.Select--multi) .Select-value': {
+    left: 15,
+    marginBottom: '5px',
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 15,
+    top: '50%',
+    transform: 'translateY(-50%)',
+  },
+  '.Select:not(.Select--multi) .Select-item': {
+    left: 15,
+    marginBottom: '5px',
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 15,
+    top: '50%',
+    transform: 'translateY(-50%)',
+  },
+  '.Select:not(.Select--multi) .Select-menu-outer': {
+    backgroundColor: Theme.white
+  },
+};
+const etc = {
+  '.Select-item-label': {
+    maxWidth: 300,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  },
+  '.Select-menu-outer': {
+    clear: 'both',
+    boxShadow: `1px 1px 1px '${Theme.grey}'`,
+    maxHeight: 130,
+    overflowX: 'visible',
+    padding: 10,
+    zIndex: 1,
+    borderTop: `1px solid ${Theme.grey}`,
+  },
+  '.Select-noresults, .Select-clear, .Select-menu::-webkit-scrollbar': {
+    display: 'none'
+  },
+  '.Select-menu::-webkit-scrollbar': {
+    display: 'none'
+  },
+  '.Select--multi .Select-value': {
+    backgroundColor: Theme.brandSecondary,
+    borderRadius: 5,
+    color: Theme.white,
+    height: 30,
+    lineHeight: '30px',
+    padding: '0 10px',
+    position: 'relative',
+  },
+  '.Select--multi .Select-item': {
+    backgroundColor: Theme.brandSecondary,
+    borderRadius: 5,
+    color: Theme.white,
+    height: 30,
+    lineHeight: '30px',
+    padding: '0 10px',
+    position: 'relative',
+  },
+  '.Select--multi .Select-value-icon': {
+    cursor: 'pointer',
+    fontSize: Theme.fontBig,
+    position: 'absolute',
+    right: 10,
+    visibility: 'hidden',
+    zIndex: 1,
+  },
+  '.Select--multi .Select-item-icon': {
+    cursor: 'pointer',
+    fontSize: Theme.fontBig,
+    position: 'absolute',
+    right: 10,
+    visibility: 'hidden',
+    zIndex: 1,
+  },
+  '.Select--multi .Select-value:hover .Select-value-icon': {
+    visibility: 'visible'
+  },
+  '.Select--multi .Select-item:hover .Select-item-icon': {
+    visibility: 'visible'
+  },
+  '.Select-option.is-selected': {
+    color: Theme.blue,
+    fontWeight: 400,
+  },
+  '.Select-option.is-selected.is-focused': {
+    color: Theme.blue,
+    fontWeight: 700,
+  },
+  '.Select-option.is-focused': {
+    color: Theme.fontColor,
+    fontWeight: 700,
+  },
+  '.Select-option': {
+    cursor: 'pointer',
+    overflow: 'hidden',
+    padding: 0,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+};
+export default {
+  ...etc,
+  ...multiselect,
+  ...normal,
+  '.Select:not(.is-open) .Select-control' : {
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  '.Select' : {
+    flex: '1 1 0'
+  },
+  '.Select.is-disabled' : {
+    color: Theme.grey
+  },
+  '.Select-control' : {
+    lineHeight: '40px',
+    padding: '0 40px 0 15px',
+    position: 'relative',
+  },
+  '.Select-control *' : {
+    boxSizing: 'border-box'
+  },
+  '.Select-value' : {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
+  '.Select-item' : {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
+  '.Select-placeholder' : {
+    position: 'absolute',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    lineHeight: '40px',
+  },
+  '.Select-clear' : {
+    display: 'none'
+  },
+  '.Select-input input' : {
+    backgroundColor: 'transparent',
+    border: 'none',
+    boxSizing: 'content-box',
+    maxHeight: 40,
+    padding: '0!important',
+  },
+  '.Select-menu' : {
+    lineHeight: 1.5,
+    maxHeight: 142,
+    overflowY: 'auto',
+    position: 'relative',
+  },
+  '.Select.upsideDown' : {
+    display: 'flex',
+    flexDirection: 'column-reverse',
+  },
+  '.Select.upsideDown > .Select-menu-outer' : {
+    backgroundColor: Theme.grey,
+    transform: 'translateY(-100%)',
+  },
+  '.Select.upsideDown > .Select-menu-outer > .Select-menu' : {
+    display: 'flex',
+    flexDirection: 'column-reverse',
+  },
+  '.gridFilterSelect .is-searchable' : {
+    flex: '0 1 auto',
+    boxShadow: 'none',
+  },
+  '.gridFilterSelect .is-searchable .Select-item' : {
+    margin: '0 5px 10px 0'
+  },
+  '.gridFilterSelect .is-searchable .Select-value' : {
+    margin: '0 5px 10px 0'
+  },
+  '.gridFilterSelect .is-searchable .Select-menu-outer' : {
+    border: `1px solid ${Theme.grey}`,
+    backgroundColor: Theme.white,
+    maxWidth: 360,
+  },
+  '.gridFilterSelect .is-searchable .Select-input' : {
+    padding: '5px 0',
+    clear: 'both',
+  },
+  '.gridFilterSelect .is-searchable .Select-control' : {
+    padding: 0,
+    lineHeight: 'normal',
+  },
+};

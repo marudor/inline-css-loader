@@ -5,9 +5,11 @@ import path from 'path';
 import { parse } from 'babylon';
 import generate from 'babel-generator';
 
-
 function getTree(input) {
-  return parse(input, { sourceType: 'module' });
+  return parse(input, {
+    sourceType: 'module',
+    plugins: inlineCssLoader.enabledPlugins,
+  });
 }
 
 function normalizeInput(input) {
@@ -29,29 +31,7 @@ function readFile(filePath) {
   return fs.readFileSync(path.resolve(__dirname, `${filePath}.txt`), { encoding: 'utf8' });
 }
 
-describe('inline CSS Loader', () => {
-  // const exportNodes = [];
-  // exportNodes.push(readFile('exportNode/es5'));
-  // exportNodes.push(readFile('exportNode/es6'));
-  // exportNodes.push(readFile('exportNode/babel'));
-  // exportNodes.push(readFile('exportNode/babelLoose'));
-  // exportNodes.push(readFile('exportNode/babelSpread'));
-  // exportNodes.push(readFile('exportNode/babelRuntimeSpread'));
-  // exportNodes.push(readFile('exportNode/webpack'));
-  // exportNodes.push(readFile('exportNode/webpack2'));
-  // exportNodes.push(readFile('exportNode/webpack3'));
-  // exportNodes.push(readFile('exportNode/webpack4'));
-  // exportNodes.push(readFile('exportNode/webpack5'));
-  // it('should find nodes', () => {
-  //   exportNodes.forEach(n => {
-  //     const tree = parseCode(n);
-  //     expect(tree).toBeDefined();
-  //     const root = inlineCssLoader.getExportsNode(tree.body);
-  //     expect(root).toBeDefined();
-  //     expect(root.type).toBe('ObjectExpression');
-  //   });
-  // });
-
+describe('HandPicked', () => {
   const fullparseCode = [];
   fullparseCode.push(readFile('fullObjects/simple'));
   fullparseCode.push(readFile('fullObjects/spread'));
@@ -147,5 +127,21 @@ describe('inline CSS Loader', () => {
     const out = readFile('webpackOut');
     const generatedFromTree = normalizeInput(out);
     expect(generatedFromTree).toBe(runLoader(inp));
+  });
+});
+
+describe('real Examples', () => {
+  const tests = fs.readdirSync(path.resolve(__dirname, 'real'));
+  tests
+  .map(testFolder => ({
+    name: testFolder,
+    inp: readFile(`real/${testFolder}/input`),
+    out: readFile(`real/${testFolder}/output`),
+  }))
+  .forEach(testFolder => {
+    it(testFolder.name, () => {
+      const out = normalizeInput(testFolder.out);
+      expect(out).toBe(runLoader(testFolder.inp));
+    });
   });
 });

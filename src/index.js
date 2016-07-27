@@ -164,21 +164,34 @@ const removeDuplicateVisitor = {
   },
 };
 
+const enabledPlugins = [
+  'objectRestSpread',
+  'flow',
+  'classConstructorCall',
+  'classProperties',
+  'exportExtensions',
+  'exponentiationOperator',
+];
+
 function generateTree(content) {
   let tree = parse(content, {
     sourceType: 'module',
+    plugins: enabledPlugins,
   });
   traverse(tree, splitMultipleVisitor);
   tree = parse(generate(tree, {}, content).code, {
     sourceType: 'module',
+    plugins: enabledPlugins,
   });
   traverse(tree, flattenVisitor);
   tree = parse(generate(tree, {}, content).code, {
     sourceType: 'module',
+    plugins: enabledPlugins,
   });
   traverse(tree, removeEmptyVisitor);
   tree = parse(generate(tree, {}, content).code, {
     sourceType: 'module',
+    plugins: enabledPlugins,
   });
   keys = [];
   traverse(tree, removeDuplicateVisitor);
@@ -193,6 +206,7 @@ function main(content) {
   return generate(generateTree(content), this.generateOptions || {}, content).code;
 }
 module.exports = main;
+module.exports.enabledPlugins = enabledPlugins;
 module.exports.splitMultipleVisitor = splitMultipleVisitor;
 module.exports.flattenVisitor = flattenVisitor;
 module.exports.removeEmptyVisitor = removeEmptyVisitor;

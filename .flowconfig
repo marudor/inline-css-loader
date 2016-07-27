@@ -1,9 +1,9 @@
 [ignore]
-.*node_modules/babel-.*
 .*node_modules/bluebird/.*
 .*node_modules/lodash.*
 .*node_modules/jest.*
 .*node_modules/uuid-js.*
+.*node_modules/babel-core.*
 .*node_modules/axios-js.*
 .*node_modules/cli.*
 .*node_modules/koa/.*
