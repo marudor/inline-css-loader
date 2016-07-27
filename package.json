@@ -55,6 +55,10 @@
   },
   "dependencies": {
     "acorn": "3.3.0",
+    "babel-generator": "^6.11.4",
+    "babel-traverse": "^6.11.4",
+    "babel-types": "^6.11.1",
+    "babylon": "^6.8.4",
     "escodegen": "1.6.1",
     "lodash": "4.14.0"
   },
