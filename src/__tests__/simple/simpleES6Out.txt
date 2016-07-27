@@ -1,11 +1,11 @@
 export default {
-  '.foo bar': {
-    width: 100
+  '.foo.bar' : {
+    width: 300
   },
-  '.foo > batz': {
+  '.foo > batz' : {
     width: 200
   },
-  '.foo.bar': {
-    width: 300
-  }
+  '.foo bar' : {
+    width: 100
+  },
 };

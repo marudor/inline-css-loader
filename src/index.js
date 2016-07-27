@@ -25,22 +25,10 @@ function isMainChild(path) {
   return path.parentPath.parent.type === 'AssignmentExpression' && path.parentPath.parent.left.object.name === 'exports';
 }
 
+
 function getNewNodes(node, parent) {
   const parentKeyName = parent.key ? (parent.key.value || parent.key.name) : '';
   const pathKeyName = (node.key.value || node.key.name);
-  if (pathKeyName.includes(',')) {
-    const newKeys = pathKeyName.split(',');
-    const newNodes = [];
-    newKeys.forEach(newKey => {
-      const cloned = node.__clone();
-      cloned.key = cloned.key.__clone();
-      cloned.key.value = newKey.trim();
-      cloned.key.type = 'StringLiteral';
-      cloned.value = cloned.value.__clone();
-      newNodes.push(cloned);
-    });
-    return newNodes;
-  }
 
   if (parentKeyName === '') {
     return [];
@@ -51,9 +39,7 @@ function getNewNodes(node, parent) {
   if (pathKeyName.includes('&')) {
     andReplacer = parentParts.pop();
   }
-  if (node.__skip) {
-    return [];
-  }
+
 
 
   const newKey = `${parentParts.join(' ')} ${pathKeyName.replace('&', andReplacer)}`.trim();
@@ -62,13 +48,48 @@ function getNewNodes(node, parent) {
   newNode.key.value = newKey;
   newNode.key.type = 'StringLiteral';
   newNode.value = node.value.__clone();
-  newNode.__skip = true;
   return [newNode];
 }
 
 let root;
 let mediaRoot;
-const visitor = {
+
+const splitMultipleVisitor = {
+  ObjectProperty: {
+    exit(path) {
+      if (path.data.remove) {
+        path.remove();
+      }
+    },
+    enter(path) {
+      const parent = path.parentPath.parent;
+      if (!path.node.key) {
+        return;
+      }
+      if (path.node.value.type !== 'ObjectExpression') {
+        if (path.node.value.type !== 'CallExpression' || path.node.value.callee.name !== '_extends') {
+          return;
+        }
+      }
+      const pathKeyName = (path.node.key.value || path.node.key.name);
+      const parentKeyName = parent.key ? (parent.key.value || parent.key.name) : '';
+      if ((parent.type === 'ObjectProperty' || isMainChild(path)) && pathKeyName && parentKeyName != null) {
+        if (pathKeyName.includes(',')) {
+          const newKeys = pathKeyName.split(',');
+          path.replaceWithMultiple(newKeys.map(key => {
+            const cloned = path.node.__clone();
+            cloned.key = cloned.key.__clone();
+            cloned.key.value = key.trim();
+            cloned.key.type = 'StringLiteral';
+            return cloned;
+          }));
+        }
+      }
+    },
+  },
+};
+
+const flattenVisitor = {
   ObjectProperty: {
     exit(path) {
       if (path.data.remove) {
@@ -84,16 +105,16 @@ const visitor = {
         mediaRoot = path;
       }
       if (!path.node.key) {
-        console.log('noNodeKey', path);
         return;
       }
       if (path.node.value.type !== 'ObjectExpression') {
-        console.log('notObjectExpression', path);
-        return;
+        if (path.node.value.type !== 'CallExpression' || path.node.value.callee.name !== '_extends') {
+          return;
+        }
       }
       const pathKeyName = (path.node.key.value || path.node.key.name);
       const parentKeyName = parent.key ? (parent.key.value || parent.key.name) : '';
-      console.log(pathKeyName, '||', parentKeyName);
+      //console.log(pathKeyName, '||', parentKeyName);
       if ((parent.type === 'ObjectProperty' || isMainChild(path)) && pathKeyName && parentKeyName != null) {
         const parentParts = parentKeyName.split(' ');
         if (parentParts.includes('mediaQueries') || path.parentPath.data.isMedia) {
@@ -104,32 +125,77 @@ const visitor = {
           return;
         }
 
+        let remove = false;
         getNewNodes(path.node, parent).forEach(n => {
           if (path.parentPath.parentPath.data.isMedia || path.parentPath.parentPath.parentPath.parentPath.data.isMedia) {
             mediaRoot.insertAfter(n);
           } else {
             root.insertAfter(n);
           }
+          remove = true;
         });
-      } else {
-        console.log('mainIfFailed', path);
-        console.log(root);
+        if (remove) {
+          path.remove();
+        }
       }
     },
   },
 };
 
+const removeEmptyVisitor = {
+  ObjectProperty: {
+    exit(path) {
+      if (path.node.value.type === 'ObjectExpression' && !path.node.value.properties.length) {
+        path.remove();
+      }
+    },
+  },
+};
+
+let keys = [];
+const removeDuplicateVisitor = {
+  ObjectProperty(path) {
+    const key = path.node.key.value || path.node.key.name;
+    path.skip();
+    if (keys.includes(key)) {
+      path.remove();
+    } else {
+      keys.push(key);
+    }
+  },
+};
+
+function generateTree(content) {
+  let tree = parse(content, {
+    sourceType: 'module',
+  });
+  traverse(tree, splitMultipleVisitor);
+  tree = parse(generate(tree, {}, content).code, {
+    sourceType: 'module',
+  });
+  traverse(tree, flattenVisitor);
+  tree = parse(generate(tree, {}, content).code, {
+    sourceType: 'module',
+  });
+  traverse(tree, removeEmptyVisitor);
+  tree = parse(generate(tree, {}, content).code, {
+    sourceType: 'module',
+  });
+  keys = [];
+  traverse(tree, removeDuplicateVisitor);
+  return tree;
+}
 
 function main(content) {
   if (this.cacheable) {
     this.cacheable();
   }
 
-  const tree = parse(content, {
-    sourceType: 'module',
-  });
-  traverse(tree, visitor);
-  return generate(tree, {}, content).code;
+  return generate(generateTree(content), this.generateOptions || {}, content).code;
 }
-module.visitor = visitor;
 module.exports = main;
+module.exports.splitMultipleVisitor = splitMultipleVisitor;
+module.exports.flattenVisitor = flattenVisitor;
+module.exports.removeEmptyVisitor = removeEmptyVisitor;
+module.exports.removeDuplicateVisitor = removeDuplicateVisitor;
+module.exports.generateTree = generateTree;

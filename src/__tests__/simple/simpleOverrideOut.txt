@@ -1,8 +1,8 @@
 export default {
-  '.foo .batz': {
-    right: 5,
+  '.foo .bar' : {
+    right: 15
   },
-  '.foo .bar': {
-    right: 15,
-  }
+  '.foo .batz' : {
+    right: 5
+  },
 };

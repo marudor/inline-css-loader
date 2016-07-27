@@ -1,17 +1,14 @@
 'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
+Object.defineProperty(exports, '__esModule', {value: true});
 exports['default'] = {
-    '.a .b .c': {
-      x: 1
-    },
-    '.a .b .d': {
-      x: 1
-    },
-    '.a .e': {
-      x: 2
-    }
+  '.a .e': {
+    x: 2
+  },
+  '.a .b .d': {
+    x: 1
+  },
+  '.a .b .c': {
+    x: 1
+  },
 };
 module.exports = exports['default'];

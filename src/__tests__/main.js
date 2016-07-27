@@ -6,8 +6,23 @@ import { parse } from 'babylon';
 import generate from 'babel-generator';
 
 
-function normalizedParsed(input) {
-  return generate(parse(input), {}, input).code;
+function getTree(input) {
+  return parse(input, { sourceType: 'module' });
+}
+
+function normalizeInput(input) {
+  return generate(getTree(input), {
+    minified: true,
+  }, input).code;
+}
+
+function runLoader(input) {
+  return inlineCssLoader.call({
+    generateOptions: {
+      minified: true,
+      quotes: 'single',
+    },
+  }, input);
 }
 
 function readFile(filePath) {
@@ -43,8 +58,8 @@ describe('inline CSS Loader', () => {
   fullparseCode.push(readFile('fullObjects/media'));
   it('parseCode, doNothing', () => {
     fullparseCode.forEach(obj => {
-      const generatedFromTree = normalizedParsed(obj);
-      expect(generatedFromTree).toBe(inlineCssLoader.call({}, obj));
+      const generatedFromTree = normalizeInput(obj);
+      expect(generatedFromTree).toBe(runLoader(obj));
     });
   });
 
@@ -53,83 +68,84 @@ describe('inline CSS Loader', () => {
       input: readFile('transforms/complexIn'),
       output: readFile('transforms/complexOut'),
     };
-    const generatedFromTree = normalizedParsed(temp.input);
-    expect(generatedFromTree).toBe(inlineCssLoader.call({}, temp.output));
+    const generatedFromTree = normalizeInput(temp.output);
+    expect(generatedFromTree).toBe(runLoader(temp.input));
   });
   //
-  // const transforms = [];
-  // transforms.push({
-  //   input: readFile('transforms/simpleIn'),
-  //   output: readFile('transforms/simpleOut'),
-  // });
-  // transforms.push({
-  //   input: readFile('transforms/spreadIn'),
-  //   output: readFile('transforms/spreadOut'),
-  // });
-  // transforms.push({
-  //   input: readFile('transforms/complexIn'),
-  //   output: readFile('transforms/complexOut'),
-  // });
-  // transforms.push({
-  //   input: readFile('transforms/realIn'),
-  //   output: readFile('transforms/realOut'),
-  // });
+  const transforms = [];
+  transforms.push({
+    input: readFile('transforms/simpleIn'),
+    output: readFile('transforms/simpleOut'),
+  });
+  transforms.push({
+    input: readFile('transforms/spreadIn'),
+    output: readFile('transforms/spreadOut'),
+  });
+  transforms.push({
+    input: readFile('transforms/complexIn'),
+    output: readFile('transforms/complexOut'),
+  });
+  transforms.push({
+    input: readFile('transforms/realIn'),
+    output: readFile('transforms/realOut'),
+  });
+
+  it('transforms', () => {
+    transforms.forEach(t => {
+      const generatedFromTree = normalizeInput(t.output);
+      expect(generatedFromTree).toBe(runLoader(t.input));
+    });
+  });
+
+  it('complexRealTransform', () => {
+    const inp = readFile('transforms/complexRealIn');
+    const out = readFile('transforms/complexRealOut');
+    const generatedFromTree = normalizeInput(out);
+    expect(generatedFromTree).toBe(runLoader(inp));
+
+    let inpES6 = readFile('transforms/complexRealInES6');
+    let outES6 = readFile('transforms/complexRealOutES6');
+    let generatedFromTreeES6 = normalizeInput(outES6);
+    expect(generatedFromTreeES6).toBe(runLoader(inpES6));
+
+    inpES6 = readFile('transforms/complexFlowRealInES6');
+    outES6 = readFile('transforms/complexFlowRealOutES6');
+    generatedFromTreeES6 = normalizeInput(outES6);
+    expect(generatedFromTreeES6).toBe(runLoader(inpES6));
+  });
   //
-  // it('transforms', () => {
-  //   transforms.forEach(t => {
-  //     const generatedFromTree = escodegen.generate(parseCode(t.output));
-  //     expect(generatedFromTree).toBe(inlineCssLoader.call({}, t.input));
-  //   });
-  // });
-  // //
-  // it('complexRealTransform', () => {
-  //   const inp = readFile('transforms/complexRealIn');
-  //   const out = readFile('transforms/complexRealOut');
-  //   const generatedFromTree = escodegen.generate(parseCode(out));
-  //   expect(generatedFromTree).toBe(inlineCssLoader.call({}, inp));
-  //   // let inpES6 = readFile('transforms/complexRealInES6');
-  //   // let outES6 = readFile('transforms/complexRealOutES6');
-  //   // let generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
-  //   // expect(generatedFromTreeES6).toBe(inlineCssLoader.call({}, inpES6));
+  it('mediaQuery', () => {
+    const inp = readFile('transforms/mediaQueryIn');
+    const out = readFile('transforms/mediaQueryOut');
+    const generatedFromTree = normalizeInput(out);
+    expect(generatedFromTree).toBe(runLoader(inp));
+  });
+
+  const simple = [];
+  simple.push({
+    input: readFile('simple/simpleIn'),
+    output: readFile('simple/simpleOut'),
+  });
+  simple.push({
+    input: readFile('simple/simpleES6In'),
+    output: readFile('simple/simpleES6Out'),
+  });
+  simple.push({
+    input: readFile('simple/simpleOverrideIn'),
+    output: readFile('simple/simpleOverrideOut'),
+  });
+
+  it('simple', () => {
+    simple.forEach(t => {
+      const generatedFromTree = normalizeInput(t.output);
+      expect(generatedFromTree).toBe(runLoader(t.input));
+    });
+  });
   //
-  //   const inpES6 = readFile('transforms/complexFlowRealInES6');
-  //   const outES6 = readFile('transforms/complexFlowRealOutES6');
-  //   const generatedFromTreeES6 = escodegen.generate(parseCode(outES6));
-  //   expect(generatedFromTreeES6).toBe(inlineCssLoader.call({}, inpES6));
-  // });
-  //
-  // it('mediaQuery', () => {
-  //   const inp = readFile('transforms/mediaQueryIn');
-  //   const out = readFile('transforms/mediaQueryOut');
-  //   const generatedFromTree = escodegen.generate(parseCode(out));
-  //   expect(generatedFromTree).toBe(inlineCssLoader.call({}, inp));
-  // });
-  //
-  // const simple = [];
-  // simple.push({
-  //   input: readFile('simple/simpleIn'),
-  //   output: readFile('simple/simpleOut'),
-  // });
-  // // simple.push({
-  // //   input: readFile('simple/simpleES6In'),
-  // //   output: readFile('simple/simpleES6Out'),
-  // // });
-  // // simple.push({
-  // //   input: readFile('simple/simpleOverrideIn'),
-  // //   output: readFile('simple/simpleOverrideOut'),
-  // // });
-  //
-  // it('simple', () => {
-  //   simple.forEach(t => {
-  //     const generatedFromTree = escodegen.generate(parseCode(t.output));
-  //     expect(generatedFromTree).toBe(inlineCssLoader.call({}, t.input));
-  //   });
-  // });
-  //
-  // it('webpack', () => {
-  //   const inp = readFile('webpackIn');
-  //   const out = readFile('webpackOut');
-  //   const generatedFromTree = escodegen.generate(parseCode(out));
-  //   expect(generatedFromTree).toBe(inlineCssLoader.call({}, inp));
-  // });
+  it('webpack', () => {
+    const inp = readFile('webpackIn');
+    const out = readFile('webpackOut');
+    const generatedFromTree = normalizeInput(out);
+    expect(generatedFromTree).toBe(runLoader(inp));
+  });
 });

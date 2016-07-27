@@ -7,7 +7,12 @@ export default {
     position: 'relative',
     height: '100%',
   },
-  'li > .subMenu': {
+  'li:hover > .subMenu' : {
+    opacity: 1,
+    overflow: 'visible',
+    visibility: 'visible',
+  },
+  'li > .subMenu' : {
     display: 'block',
     opacity: 0,
     overflow: 'hidden',
@@ -19,16 +24,11 @@ export default {
     zIndex: 10000,
     padding: 0,
   },
-  'li > .subMenu a': {
+  'li > .subMenu li' : {
+    float: 'none'
+  },
+  'li > .subMenu a' : {
     height: 26,
     lineHeight: '26px',
-  },
-  'li > .subMenu li': {
-    float: 'none',
-  },
-  'li:hover > .subMenu': {
-    opacity: 1,
-    overflow: 'visible',
-    visibility: 'visible',
   },
 };
