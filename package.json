@@ -9,6 +9,7 @@
   "repository": "marudor/inline-css-loader",
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "rm -rf lib && babel src --out-dir lib",
     "test": "npm run lint && npm run jest",
     "lint": "eslint *.js",
