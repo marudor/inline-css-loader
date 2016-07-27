@@ -1,7 +1,6 @@
 import { parse } from 'babylon';
 import generate from 'babel-generator';
 import traverse from 'babel-traverse';
-import t from 'babel-types';
 
 function parentIsRoot(path) {
   const parent = path.parentPath.parent;
