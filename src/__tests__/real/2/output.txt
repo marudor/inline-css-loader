@@ -1,0 +1,122 @@
+import Theme from 'theme';
+import responsive from './responsive/NavBarResponsive.CSS';
+const htmlElement = {
+  border: 'none',
+  margin: 0,
+  outline: 'none',
+  padding: 0,
+};
+export default {
+  '.quickEntryInput::-webkit-input-placeholder' : {
+    color: 'white'
+  },
+  '.quickEntryInput::-moz-placeholder' : {
+    color: 'white'
+  },
+  '.quickEntryInput-ms-input-placeholder' : {
+    color: 'white'
+  },
+  a : {
+    ...htmlElement,
+    textDecoration: 'none',
+  },
+  form : htmlElement,
+  input : htmlElement,
+  li : {
+    ...htmlElement,
+    display: 'flex',
+    alignItems: 'center',
+    float: 'left',
+    listStyle: 'none',
+    position: 'relative',
+    height: '100%',
+  },
+  'li:hover > .subMenu' : {
+    opacity: 1,
+    overflow: 'visible',
+    visibility: 'visible',
+  },
+  'li > .subMenu' : {
+    display: 'block',
+    opacity: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    top: 55,
+    transition: 'all .3s ease .15s',
+    visibility: 'hidden',
+    width: 300,
+    zIndex: 10000,
+    padding: 0,
+  },
+  'li > .subMenu li' : {
+    float: 'none'
+  },
+  'li > .subMenu a' : {
+    height: 26,
+    lineHeight: '26px',
+  },
+  ul : htmlElement,
+  '.leftMenu > li:hover >.menuButton' : {
+    backgroundColor: Theme.brandLightSecondary
+  },
+  '.leftMenu > li:hover > a' : {
+    backgroundColor: Theme.brandLightSecondary
+  },
+  '.leftMenu > li > .subMenu' : {
+    left: 0,
+    padding: '10px 0',
+    background: Theme.brandLightSecondary,
+  },
+  '.leftMenu > li > .subMenu a' : {
+    color: Theme.white,
+    padding: '0 15px',
+  },
+  '.leftMenu > li > .menuButton' : {
+    color: Theme.white,
+    display: 'flex',
+    alignItems: 'center',
+    height: 55,
+    padding: '0 15px',
+    lineHeight: '65px',
+    position: 'relative',
+    textShadow: '0 0 1px rgba(0, 0, 0, 0.35)',
+    transition: 'all .3s ease',
+  },
+  '.leftMenu > li > .menuButton .navIcon' : {
+    backgroundColor: Theme.brandDarkSecondary,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  '.leftMenu > li > a' : {
+    color: Theme.white,
+    display: 'flex',
+    alignItems: 'center',
+    height: 55,
+    padding: '0 15px',
+    lineHeight: '65px',
+    position: 'relative',
+    textShadow: '0 0 1px rgba(0, 0, 0, 0.35)',
+    transition: 'all .3s ease',
+  },
+  '.leftMenu > li > a .navIcon' : {
+    backgroundColor: Theme.brandDarkSecondary,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  '.rightMenu .subMenu' : {
+    right: 0
+  },
+  '.rightMenu .subMenu a' : {
+    padding: 0,
+    color: Theme.fontColor,
+  },
+  ...responsive,
+};
