@@ -1,35 +1,5 @@
 // @flow
-import inlineCssLoader from '..';
-import fs from 'fs';
-import path from 'path';
-import { parse } from 'babylon';
-import generate from 'babel-generator';
-
-function getTree(input) {
-  return parse(input, {
-    sourceType: 'module',
-    plugins: inlineCssLoader.enabledPlugins,
-  });
-}
-
-function normalizeInput(input) {
-  return generate(getTree(input), {
-    minified: true,
-  }, input).code;
-}
-
-function runLoader(input) {
-  return inlineCssLoader.call({
-    generateOptions: {
-      minified: true,
-      quotes: 'single',
-    },
-  }, input);
-}
-
-function readFile(filePath) {
-  return fs.readFileSync(path.resolve(__dirname, `${filePath}.txt`), { encoding: 'utf8' });
-}
+import { normalizeInput, runLoader, readFile } from '../testHelper';
 
 describe('HandPicked', () => {
   const fullparseCode = [];
@@ -127,21 +97,5 @@ describe('HandPicked', () => {
     const out = readFile('webpackOut');
     const generatedFromTree = normalizeInput(out);
     expect(generatedFromTree).toBe(runLoader(inp));
-  });
-});
-
-describe('real Examples', () => {
-  const tests = fs.readdirSync(path.resolve(__dirname, 'real'));
-  tests
-  .map(testFolder => ({
-    name: testFolder,
-    inp: readFile(`real/${testFolder}/input`),
-    out: readFile(`real/${testFolder}/output`),
-  }))
-  .forEach(testFolder => {
-    it(testFolder.name, () => {
-      const out = normalizeInput(testFolder.out);
-      expect(out).toBe(runLoader(testFolder.inp));
-    });
   });
 });

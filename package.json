@@ -38,8 +38,8 @@
   ],
   "description": "css loader module for webpack",
   "devDependencies": {
-    "babel-cli": "6.5.1",
-    "babel-core": "6.4.5",
+    "babel-cli": "6.11.4",
+    "babel-core": "6.11.4",
     "babel-eslint": "6.1.2",
     "babel-plugin-syntax-flow": "6.8.0",
     "babel-plugin-syntax-trailing-function-commas": "6.8.0",
@@ -49,14 +49,14 @@
     "babel-plugin-transform-export-extensions": "6.8.0",
     "babel-plugin-transform-flow-strip-types": "6.8.0",
     "babel-plugin-transform-object-rest-spread": "6.8.0",
-    "eslint": "3.1.1",
-    "eslint-config-marudor": "2.0.6",
+    "eslint": "3.2.2",
+    "eslint-config-marudor": "2.0.7",
     "eslint-plugin-flow-vars": "0.5.0",
-    "jest-cli": "^13.2.3"
+    "jest-cli": "14.1.0"
   },
   "dependencies": {
     "babel-generator": "^6.11.4",
-    "babel-traverse": "^6.11.4",
+    "babel-traverse": "6.12.0",
     "babylon": "^6.8.4"
   },
   "maintainers": [
