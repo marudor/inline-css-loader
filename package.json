@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "babel-generator": "^6.11.4",
-    "babel-traverse": "6.12.0",
+    "babel-traverse": "6.13.0",
     "babylon": "^6.8.4"
   },
   "maintainers": [
