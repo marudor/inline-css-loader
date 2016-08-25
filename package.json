@@ -45,7 +45,7 @@
     "babel-plugin-syntax-trailing-function-commas": "6.8.0",
     "babel-plugin-transform-async-to-generator": "6.8.0",
     "babel-plugin-transform-class-properties": "6.11.5",
-    "babel-plugin-transform-es2015-modules-commonjs": "6.11.5",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.14.0",
     "babel-plugin-transform-export-extensions": "6.8.0",
     "babel-plugin-transform-flow-strip-types": "6.8.0",
     "babel-plugin-transform-object-rest-spread": "6.8.0",
