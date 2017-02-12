@@ -28,5 +28,5 @@ export function runLoader(input) {
 }
 
 export function readFile(filePath) {
-  return fs.readFileSync(path.resolve(__dirname, `${filePath}.txt`), { encoding: 'utf8' });
+  return fs.readFileSync(path.resolve(__dirname, `__tests__/${filePath}.txt`), { encoding: 'utf8' });
 }
