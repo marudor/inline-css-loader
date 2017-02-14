@@ -38,24 +38,24 @@
   ],
   "description": "css loader module for webpack",
   "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-core": "^6.22.1",
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-syntax-trailing-function-commas": "^6.22.0",
     "babel-plugin-transform-async-to-generator": "^6.22.0",
-    "babel-plugin-transform-class-properties": "^6.22.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.23.0",
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "eslint": "^3.15.0",
-    "eslint-config-marudor": "^4.1.1",
+    "eslint-config-marudor": "^4.1.2",
     "jest-cli": "^18.1.0"
   },
   "dependencies": {
-    "babel-generator": "^6.11.4",
-    "babel-traverse": "^6.22.1",
+    "babel-generator": "^6.23.0",
+    "babel-traverse": "^6.23.1",
     "babylon": "^6.8.4"
   },
   "maintainers": [
